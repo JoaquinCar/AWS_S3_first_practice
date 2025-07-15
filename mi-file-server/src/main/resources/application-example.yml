@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+aws:
+  s3:
+    bucket-name: your-s3-bucket-name
+    region: your-aws-region
+  access-key: ${AWS_ACCESS_KEY_ID:}
+  secret-key: ${AWS_SECRET_ACCESS_KEY:}
+
+file:
+  upload:
+    max-size: 10MB
+    allowed-types: jpg,jpeg,png,pdf,txt,doc,docx
+
+logging:
+  level:
+    com.example: DEBUG
+    software.amazon.awssdk: INFO

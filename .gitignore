@@ -1,0 +1,40 @@
+# Sensitive configuration
+mi-file-server/src/main/resources/application.yml
+
+# Compiled class files
+mi-file-server/target/
+*.class
+
+# Log files
+*.log
+logs/
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.vscode/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
