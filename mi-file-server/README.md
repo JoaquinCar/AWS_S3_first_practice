@@ -1,113 +1,78 @@
-# AWS File Server
+# AWS S3 File Server - Learning Project
 
-A simple file server application using AWS S3 for storage with a REST API and a responsive frontend interface.
+Este proyecto fue desarrollado como parte de mi proceso de aprendizaje sobre AWS, específicamente enfocado en el servicio Amazon S3 (Simple Storage Service) y la integración con aplicaciones Java Spring Boot.
 
-## Features
+## Propósito del Proyecto
 
-- Upload files to AWS S3
-- List all uploaded files
-- Download files
-- Delete files
-- Responsive UI with drag-and-drop file upload
+El objetivo principal de este proyecto fue aprender y practicar:
 
-## Technologies Used
+- Configuración y uso de servicios AWS
+- Creación y gestión de buckets S3
+- Implementación de operaciones CRUD con archivos en S3
+- Gestión segura de credenciales AWS
+- Desarrollo de una API REST con Spring Boot
+- Creación de una interfaz de usuario sencilla pero funcional
 
-- **Backend**:
-  - Spring Boot 2.7.14
-  - AWS SDK 2.20.56
-  - Java 11
+## Implementación AWS
 
-- **Frontend**:
-  - HTML5
-  - CSS3
-  - JavaScript (Vanilla)
-  - Font Awesome for icons
+### Configuración de IAM
 
-## Prerequisites
+Para este proyecto, seguí las mejores prácticas de seguridad de AWS:
 
-- Java 11 or higher
-- Maven
-- AWS Account with S3 access
-- AWS credentials configured
+1. Creé un usuario IAM específico para la aplicación con permisos limitados
+2. Apliqué el principio de privilegio mínimo, otorgando solo los permisos necesarios para S3:
+   - s3:PutObject
+   - s3:GetObject
+   - s3:ListBucket
+   - s3:DeleteObject
+3. No utilicé las credenciales de usuario root
+4. Configuré las credenciales como variables de entorno en lugar de hardcodearlas
 
-## Configuration
+### Bucket S3
 
-The application uses configuration properties defined in `application.yml`. An example configuration file (`application-example.yml`) is provided as a template:
+- Creé un bucket S3 dedicado llamado `mi-file-server-bucket-joaquin-carmona`
+- Configuré la región `us-east-2` para optimizar la latencia
+- Implementé una estructura de carpetas dentro del bucket para organizar los archivos
 
-```yaml
-aws:
-  s3:
-    bucket-name: your-s3-bucket-name
-    region: your-aws-region
-  access-key: ${AWS_ACCESS_KEY_ID:}
-  secret-key: ${AWS_SECRET_ACCESS_KEY:}
+## Detalles Técnicos
 
-file:
-  upload:
-    max-size: 10MB
-    allowed-types: jpg,jpeg,png,pdf,txt,doc,docx
-```
+### Backend (Spring Boot)
 
-### Required Configuration:
+- **Configuración AWS**: Implementé una clase `AwsConfig` para gestionar la conexión con AWS utilizando el SDK oficial
+- **Servicio de Archivos**: Desarrollé un `FileService` que encapsula todas las operaciones con S3:
+  - Subida de archivos con validación de tipos y tamaño
+  - Descarga de archivos
+  - Listado de archivos con metadatos
+  - Eliminación de archivos
+- **API REST**: Creé endpoints RESTful en `FileController` para todas las operaciones
+- **Manejo de Errores**: Implementé un sistema robusto de manejo de excepciones
+- **Seguridad**: Configuré CORS y aseguré que las credenciales AWS se carguen desde variables de entorno
 
-1. Create your own `application.yml` file based on the example template
-2. Set your actual S3 bucket name and AWS region
-3. Set the following environment variables:
-   - `AWS_ACCESS_KEY_ID`: Your AWS access key
-   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret key
+## Pruebas
 
-> **Note**: The `application.yml` file is excluded from version control via `.gitignore` to protect sensitive information.
+El proyecto fue probado exhaustivamente utilizando:
 
-## Running the Application
+1. **Postman**: Para probar todos los endpoints de la API:
+   - Verificación de subida de archivos con diferentes tipos y tamaños
+   - Pruebas de descarga de archivos
+   - Validación de respuestas de error
+   - Comprobación de listado de archivos
 
-1. Clone the repository
-2. Set the AWS environment variables:
-   ```
-   # PowerShell
-   $env:AWS_ACCESS_KEY_ID = "your-access-key-id"
-   $env:AWS_SECRET_ACCESS_KEY = "your-secret-access-key"
+2. **Pruebas Manuales**: A través de la interfaz de usuario para verificar:
+   - Experiencia de usuario
+   - Manejo de errores en el frontend
+   - Compatibilidad con diferentes navegadores
 
-   # Command Prompt
-   set AWS_ACCESS_KEY_ID=your-access-key-id
-   set AWS_SECRET_ACCESS_KEY=your-secret-access-key
-   ```
-3. Navigate to the project directory
-4. Run the application:
-   ```
-   mvn spring-boot:run
-   ```
-5. Open a web browser and go to `http://localhost:8080`
+3. **Consola AWS**: Para verificar:
+   - Correcta creación de objetos en S3
+   - Metadatos adecuados
+   - Permisos correctamente aplicados
 
-## API Endpoints
+## Lecciones Aprendidas
 
-- `GET /api/files`: List all files
-- `POST /api/files/upload`: Upload a file
-- `GET /api/files/download/{fileId}`: Download a file
-- `DELETE /api/files/{fileId}`: Delete a file
-- `GET /api/files/{fileId}/info`: Get file information
-- `GET /api/files/health`: Health check
-
-## Frontend Usage
-
-1. **Upload Files**:
-   - Click on the upload area or drag and drop files
-   - Select a file and click the "Upload File" button
-
-2. **View Files**:
-   - All uploaded files are displayed in the "Your Files" section
-
-3. **Download Files**:
-   - Click the download button next to a file
-
-4. **Delete Files**:
-   - Click the delete button next to a file
-   - Confirm the deletion when prompted
-
-## Limitations
-
-- Only the following file types are allowed: jpg, jpeg, png, pdf, txt, doc, docx
-- Maximum file size: 10MB
-
-## License
-
-This project is licensed under the MIT License.
+- Configuración adecuada de credenciales AWS para aplicaciones Spring Boot
+- Manejo eficiente de streams para subida y descarga de archivos
+- Implementación de metadatos en objetos S3
+- Gestión de CORS para permitir acceso desde el frontend
+- Importancia de la validación de archivos antes de subirlos a S3
+- Uso de variables de entorno para proteger información sensible
